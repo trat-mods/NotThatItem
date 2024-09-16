@@ -17,10 +17,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.nti.loaders.Loader"
+      "net.nti.loaders.NtiLoader"
     ],
     "client": [
-      "net.nti.loaders.ClientLoader"
+      "net.nti.loaders.NtiClientLoader"
     ]
   },
   "mixins": [

@@ -1,3 +1,4 @@
 {
-  "block.multihopper.multihopper": "Multi Hopper"
+  "item.nti.filter": "Filter",
+  "item.nti.filter.info": "Excluding %s"
 }
