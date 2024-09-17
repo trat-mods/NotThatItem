@@ -9,6 +9,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
+import net.nti.items.FilterItem;
+import net.nti.loaders.NtiLoader;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -22,17 +24,18 @@ public class WItemIdentifier extends WWidget {
         this.player = player;
         this.onIdChange = onIdChange;
         if (initialId != null) {
-            var item = Registries.ITEM.getOrEmpty(Identifier.of(initialId));
-            item.ifPresent(value -> this.icon = new ItemIcon(value).setGhost(true));
+            var item = Registries.ITEM.get(Identifier.of(initialId));
+            var icon = new ItemIcon(item).setGhost(true);
+            NtiLoader.LOGGER.info("setting icon to {}", item.getName());
+            this.icon = icon;
         }
-
     }
 
     @Override
     public void paint(DrawContext context, int x, int y, int mouseX, int mouseY) {
         BackgroundPainter.SLOT.paintBackground(context, x, y, this);
-        if (icon != null) {
-            icon.paint(context, x + 1, y + 1, 16);
+        if (this.icon != null) {
+            this.icon.paint(context, x + 1, y + 1, 16);
         }
     }
 
@@ -40,15 +43,16 @@ public class WItemIdentifier extends WWidget {
     public InputResult onClick(int x, int y, int button) {
         var item = player.currentScreenHandler.getCursorStack().getItem();
         var id = Registries.ITEM.getId(item);
+        if (id.equals(FilterItem.ID)) {
+            return InputResult.IGNORED;
+        }
         if (id.equals(Registries.ITEM.getId(Items.AIR))) {
-
             onIdChange.accept(id);
             this.icon = null;
             return InputResult.IGNORED;
         }
         onIdChange.accept(id);
-        this.icon = new ItemIcon(item);
-        //player.getInventory().insertStack(player.currentScreenHandler.getCursorStack());
+        this.icon = new ItemIcon(item).setGhost(true);
         return InputResult.PROCESSED;
     }
 

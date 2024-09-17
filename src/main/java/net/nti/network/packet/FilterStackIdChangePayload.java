@@ -6,14 +6,13 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 
-public record FilterStackIdChangePayload(int playerId, String id) implements CustomPayload {
+public record FilterStackIdChangePayload(String id) implements CustomPayload {
     public static final Id<FilterStackIdChangePayload> ID = CustomPayload.id("ntifilterpacket");
     public static final PacketCodec<PacketByteBuf, FilterStackIdChangePayload> CODEC = PacketCodec.of(FilterStackIdChangePayload::write, FilterStackIdChangePayload::read);
 
     public static FilterStackIdChangePayload read(PacketByteBuf buf) {
-        int playerId = buf.readVarInt();
         String id = buf.readString();
-        return new FilterStackIdChangePayload(playerId, id);
+        return new FilterStackIdChangePayload(id);
     }
 
     public void send() {
@@ -25,7 +24,6 @@ public record FilterStackIdChangePayload(int playerId, String id) implements Cus
 
 
     public void write(PacketByteBuf buf) {
-        buf.writeVarInt(playerId);
         buf.writeString(id);
     }
 

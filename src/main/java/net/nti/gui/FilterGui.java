@@ -8,18 +8,20 @@ import net.minecraft.inventory.StackReference;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.nti.gui.widgets.WItemIdentifier;
-import net.nti.initializers.NtiItems;
 import net.nti.loaders.NtiLoader;
 import net.nti.network.packet.FilterStackIdChangePayload;
 
 public class FilterGui extends ItemSyncedGuiDescription {
 
-    public FilterGui(int syncId, PlayerInventory playerInventory, StackReference owner) {
+    public FilterGui(int syncId, PlayerInventory playerInventory, StackReference owner, String initialComponentId) {
         super(NtiLoader.FILTER_SCREEN_HANDLER, syncId, playerInventory, owner);
+
         WPlainPanel root = new WPlainPanel();
         root.setSize(178, 134);
         setRootPanel(root);
-        root.add(new WItemIdentifier(playerInventory.player, this::updateFilteringComponentData, owner.get().get(NtiItems.FILTER_ITEM_ID_COMPONENT)), 34, 17);
+        NtiLoader.LOGGER.info("data equal to {}", initialComponentId);
+        WItemIdentifier identifier = new WItemIdentifier(playerInventory.player, this::updateFilteringComponentData, initialComponentId);
+        root.add(identifier, 34, 17);
 
         //root.setInsets(Insets.ROOT_PANEL);
         root.add(this.createPlayerInventoryPanel(), 8, 40);
@@ -32,10 +34,10 @@ public class FilterGui extends ItemSyncedGuiDescription {
     }
 
     private void updateFilteringComponentData(Identifier id) {
+        //ownerStack.set(NtiItems.FILTER_ITEM_ID_COMPONENT, id.toString());
         if (!playerInventory.player.getWorld().isClient) return;
-        new FilterStackIdChangePayload(playerInventory.player.getId(), id.toString()).send();
+        new FilterStackIdChangePayload(id.toString()).send();
         // This must be done on server. Either create a packet, send to server and do the modification on the server callback
-        //owner.get().set(NtiItems.FILTER_ITEM_ID_COMPONENT, id.toString());
         NtiLoader.LOGGER.info("filtering id changed {}", id);
     }
 }

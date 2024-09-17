@@ -8,6 +8,7 @@ import net.nti.gui.FilterScreen;
 public class NtiClientLoader implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        HandledScreens.<FilterGui, FilterScreen>register(NtiLoader.FILTER_SCREEN_HANDLER, (gui, inventory, title) -> new FilterScreen(gui, inventory.player.getInventory(), title));
+        HandledScreens.<FilterGui, FilterScreen>register(NtiLoader.FILTER_SCREEN_HANDLER, FilterScreen::new);
+        //ModelLoadingPlugin.register(new NtiModelLoadingPlugin());
     }
 }
