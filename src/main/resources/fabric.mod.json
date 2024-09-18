@@ -3,7 +3,7 @@
   "id": "nti",
   "version": "${version}",
   "name": "Not that item",
-  "description": "Introduces an item that allows to prevent picking up other items",
+  "description": "Stop picking up trash when you don't want to. Introduces a filter that can prevent players from picking up unwanted items.",
   "authors": [
     "trat"
   ],
@@ -31,8 +31,5 @@
     "minecraft": "~1.21",
     "java": ">=21",
     "fabric-api": "*"
-  },
-  "suggests": {
-    "another-mod": "*"
   }
 }
